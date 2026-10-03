@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="popup-item-controls">
                         <div class="counter-box">
-                            <button class="cnt-btn popup-minus" data-key="${item.key}">-</button>
+                            <button class="cnt-btn popup-minus" data-key="${item.key}">−</button>
                             <span class="cnt-value">${item.qty}</span>
                             <button class="cnt-btn popup-plus" data-key="${item.key}">+</button>
                         </div>
@@ -454,7 +454,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="popup-item-controls">
                         <div class="counter-box">
-                            <button class="cnt-btn confirm-minus" data-key="${item.key}">-</button>
+                            <button class="cnt-btn confirm-minus" data-key="${item.key}">−</button>
                             <span class="cnt-value">${item.qty}</span>
                             <button class="cnt-btn confirm-plus" data-key="${item.key}">+</button>
                         </div>

@@ -6,576 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сайт Шаблон — Визитка</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .info-card img {
-            width: 100%;
-            aspect-ratio: 600 / 650;
-            object-fit: cover;
-        }
-
-        .info-card .counter-box {
-            display: none !important;
-        }
-
-        .weight-option .desc-hint {
-            font-size: 11px;
-            color: #9ca3af;
-            font-weight: 400;
-            margin-left: 8px;
-        }
-
-        .preorder-info-block {
-            font-size: 14.5px;
-            color: #1e3a8a;
-            background: #eff6ff;
-            padding: 14px 18px;
-            border-radius: 12px;
-            margin-bottom: 22px;
-            border-left: 4px solid #2563eb;
-            line-height: 1.55;
-        }
-
-        .preorder-info-block .preorder-title {
-            display: block;
-            font-weight: 800;
-            margin-bottom: 4px;
-        }
-
-        .preorder-info-block .preorder-sub {
-            display: block;
-            font-size: 12.5px;
-            color: #475569;
-            font-weight: 600;
-        }
-
-        /* === Отзывы (перенос стилей из contact.html) === */
-        .reviews-section {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: var(--card-radius);
-            border: 1px solid #d1d5db;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            margin-bottom: 40px;
-        }
-
-        .reviews-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .reviews-header-row h2 {
-            color: #1e1e1e;
-            font-size: 20px;
-            font-weight: 800;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .reviews-summary {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #f3f4f6;
-            padding: 8px 15px;
-            border-radius: 12px;
-            border: 1px solid #d1d5db;
-            font-size: 14px;
-            font-weight: 700;
-            color: #1e1e1e;
-        }
-
-        .summary-stars {
-            color: #f59e0b;
-            letter-spacing: 2px;
-        }
-
-        .review-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #d1d5db;
-            margin-bottom: 30px;
-        }
-
-        .rating-select-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .rating-label {
-            font-size: 14px;
-            font-weight: 600;
-            color: #6b7280;
-        }
-
-        .rating-stars {
-            display: flex;
-            gap: 4px;
-            cursor: pointer;
-        }
-
-        .rating-stars span {
-            font-size: 26px;
-            color: #d1d5db;
-            transition: color 0.2s;
-        }
-
-        .rating-stars span.active,
-        .rating-stars span:hover {
-            color: #f59e0b;
-        }
-
-        .review-input, .review-textarea {
-            padding: 12px 15px;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-            background: #ffffff;
-            color: #1e1e1e;
-            font-family: inherit;
-        }
-
-        .review-input:focus, .review-textarea:focus {
-            border-color: #6b7280;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .review-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .submit-review-btn {
-            background-color: #1e1e1e;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            align-self: flex-start;
-        }
-
-        .submit-review-btn:hover {
-            background-color: #374151;
-            transform: translateY(-1px);
-        }
-
-        .reviews-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .no-reviews-msg {
-            text-align: center;
-            color: #6b7280;
-            font-style: italic;
-            padding: 20px;
-            background: #f3f4f6;
-            border-radius: 10px;
-            border: 1px dashed #d1d5db;
-        }
-
-        .review-card {
-            background: #f3f4f6;
-            padding: 18px 20px;
-            border-radius: 12px;
-            border: 1px solid #d1d5db;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            position: relative;
-        }
-
-        .review-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .review-author-name {
-            font-weight: 700;
-            font-size: 16px;
-            color: #1e1e1e;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .review-card-stars {
-            color: #f59e0b;
-            font-size: 15px;
-        }
-
-        .review-card-text {
-            font-size: 15px;
-            color: #1e1e1e;
-            line-height: 1.4;
-            word-break: break-word;
-        }
-
-        .playmarket-reply-box {
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-            border-left: 4px solid #6b7280;
-            padding: 12px 15px;
-            margin-top: 8px;
-            margin-left: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .playmarket-reply-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 13px;
-        }
-
-        .playmarket-reply-author {
-            font-weight: 800;
-            color: #1e1e1e;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .playmarket-reply-text {
-            font-size: 14px;
-            color: #1e1e1e;
-            line-height: 1.4;
-            word-break: break-word;
-        }
-
-        .review-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 5px;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 13px;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-weight: 700;
-            transition: var(--transition);
-        }
-
-        .delete-btn {
-            color: #ffffff;
-            background: #ef4444;
-            border: 1px solid #dc2626;
-            box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
-        }
-
-        .delete-btn:hover {
-            background: #dc2626;
-            transform: translateY(-1px);
-        }
-
-        .reply-admin-btn {
-            color: #ffffff;
-            background: #3b82f6;
-            border: 1px solid #2563eb;
-            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
-        }
-        .reply-admin-btn:hover {
-            background: #2563eb;
-            transform: translateY(-1px);
-        }
-
-        .edit-btn {
-            color: #ffffff;
-            background: #f59e0b;
-            border: 1px solid #d97706;
-            box-shadow: 0 2px 6px rgba(245, 158, 11, 0.2);
-        }
-        .edit-btn:hover {
-            background: #d97706;
-            transform: translateY(-1px);
-        }
-
-        .admin-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-        .admin-modal.active { display: flex; }
-        .admin-modal-content {
-            background: #fff;
-            padding: 25px;
-            border-radius: 16px;
-            width: 90%;
-            max-width: 450px;
-            border: 2px solid #6b7280;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .admin-modal-content h3 {
-            color: #1e1e1e;
-            font-size: 18px;
-            margin: 0;
-        }
-
-        .profanity-error-msg {
-            color: #dc2626;
-            background-color: #fee2e2;
-            border: 1px solid #fecaca;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 700;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* === Контакты (перенос стилей из contact.html) === */
-        .contacts-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .contact-info-card {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: var(--card-radius);
-            border: 1px solid #d1d5db;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .contact-section h2 {
-            color: #1e1e1e;
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .contact-address-text {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1e1e1e;
-            line-height: 1.5;
-        }
-
-        .contact-phones-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .phone-item {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            background: #f3f4f6;
-            padding: 12px 15px;
-            border-radius: 12px;
-            border: 1px solid #d1d5db;
-        }
-
-        .phone-label {
-            font-size: 13px;
-            color: #6b7280;
-            font-weight: 600;
-        }
-
-        .phone-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .phone-number {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1e1e1e;
-            text-decoration: none;
-        }
-
-        .phone-number:hover {
-            color: #2563eb;
-        }
-
-        .wa-mini-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: #25d366;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: var(--transition);
-            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
-            white-space: nowrap;
-        }
-
-        .wa-mini-btn:hover {
-            background-color: #20ba5a;
-            transform: scale(1.05);
-        }
-
-        .map-card {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: var(--card-radius);
-            border: 1px solid #d1d5db;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .map-card h2 {
-            font-size: 18px;
-            color: var(--text-dark);
-            margin: 0;
-        }
-
-        .map-container {
-            width: 100%;
-            max-width: 480px;
-            height: 280px;
-            margin: 0 auto;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #d1d5db;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #f3f4f6;
-            position: relative;
-        }
-
-        .map-container iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        .map-placeholder-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #6b7280;
-            font-weight: 700;
-            font-size: 18px;
-            text-align: center;
-            pointer-events: none;
-        }
-
-        .map-placeholder-text small {
-            display: block;
-            font-size: 13px;
-            font-weight: 400;
-            margin-top: 8px;
-        }
-
-        .navigators-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .navigator-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            background-color: #1e1e1e;
-            color: #ffffff;
-            text-decoration: none;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 15px;
-            transition: var(--transition);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .navigator-btn:hover {
-            background-color: #374151;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        .navigator-btn.twogis {
-            background-color: #00aa55;
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(0, 170, 85, 0.2);
-        }
-
-        .navigator-btn.twogis:hover {
-            background-color: #00964c;
-            box-shadow: 0 6px 16px rgba(0, 170, 85, 0.3);
-        }
-
-        @media (max-width: 768px) {
-            .contacts-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            .map-container { max-width: 100%; height: 220px; }
-            .contact-info-card { padding: 20px; }
-            .map-card { padding: 15px; }
-        }
-
-        /* Плавный якорный скролл с отступом от шапки */
-        .section-anchor { scroll-margin-top: 30px; }
-
-        #catalog, #about, #contacts, #reviews {
-            scroll-margin-top: 30px;
-        }
-    </style>
 </head>
 
 <body>
 
     <div class="main-wrapper">
 
+        <!-- ==================== ШАПКА ==================== -->
         <header>
             <div class="header-top">
                 <div class="header-center-brand">
@@ -590,16 +27,27 @@
                     </div>
                 </div>
             </div>
-
-            <nav>
-                <ul>
-                    <li><a href="#catalog">Товары</a></li>
-                    <li><a href="#about">О нас</a></li>
-                    <li><a href="#contacts">Контакты</a></li>
-                    <li><a href="#reviews">Отзывы</a></li>
-                </ul>
-            </nav>
         </header>
+
+        <!-- ==================== ЯКОРНАЯ НАВИГАЦИЯ ==================== -->
+        <nav class="top-anchor-nav" aria-label="Быстрая навигация по разделам">
+            <a href="#catalog">
+                <span class="anchor-icon">🛒</span>
+                <span>Товары</span>
+            </a>
+            <a href="#about">
+                <span class="anchor-icon">🏠</span>
+                <span>О нас</span>
+            </a>
+            <a href="#contacts">
+                <span class="anchor-icon">📞</span>
+                <span>Контакты</span>
+            </a>
+            <a href="#reviews">
+                <span class="anchor-icon">⭐</span>
+                <span>Отзывы</span>
+            </a>
+        </nav>
 
         <main>
 
@@ -640,7 +88,7 @@
                                 <div class="weight-option" data-weight="1" data-price="0">
                                     <span class="weight-label">Опция 1 — 0 ₸</span>
                                     <div class="counter-box">
-                                        <button class="cnt-btn minus" type="button">-</button>
+                                        <button class="cnt-btn minus" type="button">−</button>
                                         <span class="cnt-value">0</span>
                                         <button class="cnt-btn plus" type="button">+</button>
                                     </div>
@@ -649,7 +97,7 @@
                                 <div class="weight-option" data-weight="1.5" data-price="0">
                                     <span class="weight-label">Опция 2 — 0 ₸</span>
                                     <div class="counter-box">
-                                        <button class="cnt-btn minus" type="button">-</button>
+                                        <button class="cnt-btn minus" type="button">−</button>
                                         <span class="cnt-value">0</span>
                                         <button class="cnt-btn plus" type="button">+</button>
                                     </div>
@@ -659,6 +107,9 @@
                         </div>
 
                         <div class="cluster-plate">«+» / «−» — добавьте товар в корзину</div>
+
+                        <!-- Разделительная чёрточка -->
+                        <div class="section-divider"></div>
 
                         <div class="description-wrapper">
                             <p class="description-content">
@@ -692,7 +143,7 @@
                                 <div class="weight-option" data-weight="1" data-price="0">
                                     <span class="weight-label">Опция 1 — 0 ₸</span>
                                     <div class="counter-box">
-                                        <button class="cnt-btn minus" type="button">-</button>
+                                        <button class="cnt-btn minus" type="button">−</button>
                                         <span class="cnt-value">0</span>
                                         <button class="cnt-btn plus" type="button">+</button>
                                     </div>
@@ -701,7 +152,7 @@
                                 <div class="weight-option" data-weight="1.5" data-price="0">
                                     <span class="weight-label">Опция 2 — 0 ₸</span>
                                     <div class="counter-box">
-                                        <button class="cnt-btn minus" type="button">-</button>
+                                        <button class="cnt-btn minus" type="button">−</button>
                                         <span class="cnt-value">0</span>
                                         <button class="cnt-btn plus" type="button">+</button>
                                     </div>
@@ -711,6 +162,9 @@
                         </div>
 
                         <div class="cluster-plate">«+» / «−» — добавьте товар в корзину</div>
+
+                        <!-- Разделительная чёрточка -->
+                        <div class="section-divider"></div>
 
                         <div class="description-wrapper">
                             <p class="description-content">
@@ -743,7 +197,7 @@
                                 <div class="weight-option" data-weight="1" data-price="0">
                                     <span class="weight-label">Опция 1 — 0 ₸</span>
                                     <div class="counter-box">
-                                        <button class="cnt-btn minus" type="button">-</button>
+                                        <button class="cnt-btn minus" type="button">−</button>
                                         <span class="cnt-value">0</span>
                                         <button class="cnt-btn plus" type="button">+</button>
                                     </div>
@@ -752,7 +206,7 @@
                                 <div class="weight-option" data-weight="1.5" data-price="0">
                                     <span class="weight-label">Опция 2 — 0 ₸</span>
                                     <div class="counter-box">
-                                        <button class="cnt-btn minus" type="button">-</button>
+                                        <button class="cnt-btn minus" type="button">−</button>
                                         <span class="cnt-value">0</span>
                                         <button class="cnt-btn plus" type="button">+</button>
                                     </div>
@@ -762,6 +216,9 @@
                         </div>
 
                         <div class="cluster-plate">«+» / «−» — добавьте товар в корзину</div>
+
+                        <!-- Разделительная чёрточка -->
+                        <div class="section-divider"></div>
 
                         <div class="description-wrapper">
                             <p class="description-content">
@@ -781,6 +238,9 @@
 
                 </div>
             </section>
+
+            <!-- Разделитель между секциями -->
+            <div class="section-divider-label">О нас</div>
 
             <!-- ========================= О НАС ========================= -->
             <section id="about">
@@ -867,6 +327,9 @@
                 </div>
             </section>
 
+            <!-- Разделитель между секциями -->
+            <div class="section-divider-label">Контакты</div>
+
             <!-- ========================= КОНТАКТЫ ========================= -->
             <section id="contacts">
                 <h1 class="page-heading">Контакты и местоположение</h1>
@@ -879,6 +342,9 @@
                         </div>
 
                         <div class="cluster-plate">Адрес контактной точки</div>
+
+                        <!-- Разделительная чёрточка между адресом и контактами -->
+                        <div class="section-divider"></div>
 
                         <div class="contact-section">
                             <h2>Контакты</h2>
@@ -919,6 +385,9 @@
                             </div>
                         </div>
 
+                        <!-- Разделитель между картой и маршрутами -->
+                        <div class="section-divider"></div>
+
                         <div class="navigators-group">
                             <a href="#" class="navigator-btn" style="pointer-events: none; opacity: 0.6;">
                                 🚗 Маршрут в Яндекс Навигатор
@@ -934,6 +403,9 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Разделитель между секциями -->
+            <div class="section-divider-label">Отзывы</div>
 
             <!-- ========================= ОТЗЫВЫ ========================= -->
             <section id="reviews">
@@ -968,6 +440,9 @@
 
                         <button type="submit" class="submit-review-btn" id="submitBtn">Оставить отзыв</button>
                     </form>
+
+                    <!-- Разделительная чёрточка -->
+                    <div class="section-divider"></div>
 
                     <div class="reviews-list" id="reviewsList">
                         <div class="no-reviews-msg">Загрузка отзывов из Google Таблиц...</div>
@@ -1042,6 +517,7 @@
 
     <!-- НИЖНЯЯ ПАНЕЛЬ ЗАКАЗА -->
     <div id="order-bar" class="order-bar hidden">
+        <div class="cluster-plate-bar">Нажмите на «ЗАКАЗ» — откроется состав. Затем — «в Ватсап»</div>
         <div class="order-bar-content">
             <div id="order-bar-toggle" class="order-info">
                 <div class="order-title-row">
@@ -1076,7 +552,7 @@
                 const isCartPopupActive = cartPopup && cartPopup.classList.contains('active');
 
                 if (isOrderBarVisible || isCartPopupActive) {
-                    toTopBtn.style.bottom = '190px';
+                    toTopBtn.style.bottom = '200px';
                 } else {
                     toTopBtn.style.bottom = '90px';
                 }
