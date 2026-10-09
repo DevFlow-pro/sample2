@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         </div>
 
-        <div id="confirm-modal-items" class="cart-popup-items" style="margin-bottom: 15px;"></div>
+        <div id="confirm-modal-items" class="cart-popup-items" style="margin-bottom: 12px;"></div>
 
         <div class="confirm-fav-save-row">
             <input type="text" id="confirm-fav-name-input" placeholder="Название набора для избранного" class="fav-input" style="background: #fff;">
