@@ -424,20 +424,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateConfirmModalContent();
         modalBackdrop.style.display = 'block';
         orderConfirmModal.classList.add('active');
-
-        // Прокрутка к началу модального окна, чтобы блок выбора стола был виден сразу
-        orderConfirmModal.scrollTop = 0;
-        if (tableSelectionBlock) {
-            // Небольшая задержка, чтобы модальное окно успело отрисоваться
-            setTimeout(() => {
-                try {
-                    tableSelectionBlock.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                } catch (e) {
-                    // Fallback для старых браузеров
-                    tableSelectionBlock.scrollIntoView(false);
-                }
-            }, 120);
-        }
     }
 
     function closeOrderConfirmModal() {
