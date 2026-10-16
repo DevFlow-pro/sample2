@@ -138,7 +138,7 @@ header {
 
 .fav-badge.hidden { display: none; }
 
-/* ============ TOP ANCHOR NAV (замена nav) ============ */
+/* ============ TOP ANCHOR NAV ============ */
 
 .top-anchor-nav {
     display: flex;
@@ -476,7 +476,7 @@ section {
     font-size: 12px;
 }
 
-/* ============ CONTACTS GRID ============ */
+/* ============ CONTACT्स GRID ============ */
 
 .contacts-grid {
     display: grid;
@@ -1010,7 +1010,6 @@ section {
     transform: translateX(-50%) translateY(0);
 }
 
-/* Специфично для модального окна подтверждения заказа (фиксация высоты и центрирования на мобильных) */
 #order-confirm-modal {
     position: fixed;
     top: 50%;
@@ -1407,7 +1406,7 @@ footer {
     margin-top: auto;
 }
 
-/* ============ ANCHOR NAV (внутренний) ============ */
+/* ============ ANCHOR NAV ============ */
 
 .anchor-nav-wrapper {
     margin-bottom: 30px;
@@ -1684,32 +1683,6 @@ footer {
     border: 1px solid #d1d5db;
 }
 
-/* ============ PREORDER INFO ============ */
-
-.preorder-info-block {
-    font-size: 14.5px;
-    color: #1e3a8a;
-    background: #eff6ff;
-    padding: 14px 18px;
-    border-radius: 12px;
-    margin-bottom: 22px;
-    border-left: 4px solid #2563eb;
-    line-height: 1.55;
-}
-
-.preorder-info-block .preorder-title {
-    display: block;
-    font-weight: 800;
-    margin-bottom: 4px;
-}
-
-.preorder-info-block .preorder-sub {
-    display: block;
-    font-size: 12.5px;
-    color: #475569;
-    font-weight: 600;
-}
-
 /* ============ MOBILE ============ */
 
 @media (max-width: 992px) {
@@ -1740,7 +1713,6 @@ footer {
 
     .site-title { font-size: 20px; }
 
-    /* Якорная навигация на телефоне — 2 колонки */
     .top-anchor-nav {
         gap: 8px;
         padding: 12px;
@@ -1850,7 +1822,7 @@ footer {
         padding: 18px;
     }
 
-    /* === Исправление отображения блока избранного на телефонах (как на скриншоте №1) === */
+    /* === Идеальное выравнивание блока «Избранное» (сохраненные заказы) на мобильных === */
     #favorites-popup {
         width: 96%;
         padding: 15px;
@@ -1889,7 +1861,6 @@ footer {
         width: 100%;
     }
 
-    /* Адаптация карточки избранного в списке на мобильных */
     .fav-item-row {
         flex-direction: column;
         align-items: stretch;
@@ -1909,7 +1880,7 @@ footer {
         padding: 8px 12px;
     }
 
-    /* === Шапка корзины на телефоне: заголовок + крестик в одной строке, кнопка — на всю ширину ниже === */
+    /* === Корзина на телефоне === */
     .cart-popup-header {
         flex-wrap: wrap;
         align-items: center;
@@ -1951,7 +1922,6 @@ footer {
         width: 100%;
     }
 
-    /* === ФИКС ДЛЯ МОДАЛКИ ПОДТВЕРЖДЕНИЯ ЗАКАЗА: крестик всегда справа === */
     #order-confirm-modal .cart-popup-header {
         flex-wrap: nowrap;
         align-items: center;
