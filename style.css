@@ -984,7 +984,7 @@ section {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ============ CART POPUP ============ */
+/* ============ CART / FAVORITES POPUP ============ */
 
 .cart-popup {
     position: fixed;
@@ -1090,6 +1090,7 @@ section {
     cursor: pointer;
     line-height: 1;
     padding: 0 4px;
+    flex-shrink: 0;
 }
 
 .close-popup-btn:hover { color: var(--text-dark); }
@@ -1164,6 +1165,7 @@ section {
     padding: 10px 15px;
     border-radius: 12px;
     border: 1px solid var(--border-light);
+    gap: 10px;
 }
 
 .popup-item-info,
@@ -1171,6 +1173,8 @@ section {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    flex: 1;
+    min-width: 0;
 }
 
 .popup-item-name,
@@ -1178,15 +1182,17 @@ section {
     font-weight: 700;
     color: var(--text-dark);
     font-size: 15px;
+    word-break: break-word;
 }
 
 .popup-item-price,
 .fav-item-desc {
     font-size: 13px;
     color: var(--text-muted);
+    word-break: break-word;
 }
 
-.fav-actions { display: flex; gap: 8px; }
+.fav-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
 .fav-load-btn {
     background: var(--accent-blue);
@@ -1197,6 +1203,7 @@ section {
     font-weight: 700;
     font-size: 12px;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .fav-load-btn:hover { background: #1d4ed8; }
@@ -1210,6 +1217,7 @@ section {
     font-weight: 700;
     font-size: 12px;
     cursor: pointer;
+    white-space: nowrap;
 }
 
 .fav-del-btn:hover { background: #b91c1c; }
@@ -1840,6 +1848,65 @@ footer {
     .contact-info-card,
     .map-card {
         padding: 18px;
+    }
+
+    /* === Исправление отображения блока избранного на телефонах (как на скриншоте №1) === */
+    #favorites-popup {
+        width: 96%;
+        padding: 15px;
+    }
+
+    #favorites-popup .cart-popup-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 8px;
+    }
+
+    #favorites-popup .cart-popup-header h3 {
+        font-size: 16px;
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    #favorites-popup #close-favorites-popup {
+        flex-shrink: 0;
+        margin-left: auto;
+    }
+
+    #favorites-popup div[style*="display: flex"] {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    #favorites-popup .fav-input,
+    #favorites-popup .fav-save-btn {
+        width: 100%;
+    }
+
+    /* Адаптация карточки избранного в списке на мобильных */
+    .fav-item-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .fav-actions {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .fav-load-btn,
+    .fav-del-btn {
+        flex: 1;
+        text-align: center;
+        padding: 8px 12px;
     }
 
     /* === Шапка корзины на телефоне: заголовок + крестик в одной строке, кнопка — на всю ширину ниже === */
