@@ -1,9 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    const WHATSAPP_NUMBER = '77074242531';
+    // ============================================
+    // УНИКАЛЬНЫЙ ID САЙТА — не меняй без причины!
+    // ============================================
+    const SITE_UNIQUE_ID = 'template_two_2026';
 
-    const STORAGE_KEY = 'honey_shop_cart_v2';
-    const FAV_STORAGE_KEY = 'honey_shop_favs_v2';
+    const STORAGE_KEY = `${SITE_UNIQUE_ID}_cart_v1`;
+    const FAV_STORAGE_KEY = `${SITE_UNIQUE_ID}_favs_v1`;
+
+    const WHATSAPP_NUMBER = '77074242531';
 
     let cart = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
     let favorites = JSON.parse(localStorage.getItem(FAV_STORAGE_KEY)) || [];
@@ -33,6 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const favNameInput = document.getElementById('fav-name-input');
     const saveCurrentFavBtn = document.getElementById('save-current-fav-btn');
     const favBadge = document.getElementById('fav-badge');
+
+    // --- НОВЫЕ ЭЛЕМЕНТЫ: СОХРАНЕНИЕ В ИЗБРАННОЕ ИЗ КОРЗИНЫ ---
+    const openSaveFavPanelBtn = document.getElementById('open-save-fav-panel-btn');
+    const saveFavInputPanel = document.getElementById('save-fav-input-panel');
+    const saveFavNameInput = document.getElementById('save-fav-name-input');
+    const confirmSaveFavBtnFromCart = document.getElementById('confirm-save-fav-btn');
 
     // --- МОДАЛЬНОЕ ОКНО ПОДТВЕРЖДЕНИЯ ЗАКАЗА ---
     const orderConfirmModal = document.createElement('div');
@@ -420,6 +431,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cartPopup) cartPopup.classList.remove('active');
         if (favoritesPopup) favoritesPopup.classList.remove('active');
 
+        if (saveFavInputPanel) {
+            saveFavInputPanel.classList.add('hidden');
+        }
+
         resetTableSelection();
         updateConfirmModalContent();
         modalBackdrop.style.display = 'block';
@@ -583,12 +598,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (orderBarToggle && cartPopup) {
         orderBarToggle.addEventListener('click', () => {
             if (favoritesPopup) favoritesPopup.classList.remove('active');
+            if (saveFavInputPanel) saveFavInputPanel.classList.add('hidden');
             cartPopup.classList.toggle('active');
         });
     }
 
     if (closePopupBtn && cartPopup) {
         closePopupBtn.addEventListener('click', () => {
+            if (saveFavInputPanel) saveFavInputPanel.classList.add('hidden');
             cartPopup.classList.remove('active');
         });
     }
@@ -596,6 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (favoritesToggleBtn && favoritesPopup) {
         favoritesToggleBtn.addEventListener('click', () => {
             if (cartPopup) cartPopup.classList.remove('active');
+            if (saveFavInputPanel) saveFavInputPanel.classList.add('hidden');
             favoritesPopup.classList.toggle('active');
         });
     }
@@ -639,6 +657,47 @@ document.addEventListener('DOMContentLoaded', () => {
         whatsappBtn.addEventListener('click', (e) => {
             e.preventDefault();
             openOrderConfirmModal();
+        });
+    }
+
+    // --- СОХРАНЕНИЕ В ИЗБРАННОЕ ИЗ ПОПАПА КОРЗИНЫ ---
+    if (openSaveFavPanelBtn && saveFavInputPanel) {
+        openSaveFavPanelBtn.addEventListener('click', () => {
+            saveFavInputPanel.classList.toggle('hidden');
+            if (!saveFavInputPanel.classList.contains('hidden') && saveFavNameInput) {
+                saveFavNameInput.focus();
+            }
+        });
+    }
+
+    if (confirmSaveFavBtnFromCart) {
+        confirmSaveFavBtnFromCart.addEventListener('click', () => {
+            const cartItems = getCartItems();
+            if (cartItems.length === 0) {
+                alert('Корзина пуста, нечего сохранять!');
+                return;
+            }
+
+            let customName = saveFavNameInput.value.trim();
+            if (!customName) {
+                customName = `Набор #${favorites.length + 1}`;
+            }
+
+            const totalSum = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
+            const summaryArr = cartItems.map(item => `${item.name} — ${formatWeight(item.weight)} x${item.qty}`);
+
+            favorites.push({
+                name: customName,
+                summary: summaryArr.join(', '),
+                total: totalSum,
+                cartData: { ...cart }
+            });
+
+            localStorage.setItem(FAV_STORAGE_KEY, JSON.stringify(favorites));
+            saveFavNameInput.value = '';
+            saveFavInputPanel.classList.add('hidden');
+            updateFavoritesUI();
+            alert('Заказ успешно сохранен в избранное! ⭐');
         });
     }
 
