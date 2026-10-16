@@ -1861,6 +1861,7 @@ footer {
 
     #close-cart-popup {
         order: 2;
+        margin-left: auto;
     }
 
     .save-to-fav-btn {
@@ -1881,6 +1882,26 @@ footer {
     .save-fav-input-panel .fav-input,
     .save-fav-input-panel .fav-save-btn {
         width: 100%;
+    }
+
+    /* === ФИКС ДЛЯ МОДАЛКИ ПОДТВЕРЖДЕНИЯ ЗАКАЗА: крестик всегда справа === */
+    #order-confirm-modal .cart-popup-header {
+        flex-wrap: nowrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #order-confirm-modal .cart-popup-header h3 {
+        flex: 1 1 auto;
+        order: 1;
+        font-size: 16px;
+        min-width: 0;
+    }
+
+    #close-confirm-modal {
+        order: 2;
+        margin-left: auto;
+        flex-shrink: 0;
     }
 }
 
