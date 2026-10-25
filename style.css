@@ -1122,8 +1122,10 @@ section {
     overflow-y: auto;
 }
 
+/* === Настройка пропорций: инпут шире (flex: 2), кнопка уже (flex: 1 с ограничением) === */
 .fav-input {
-    flex: 1;
+    flex: 2 1 0%;
+    min-width: 0;
     padding: 8px 12px;
     border: 1px solid var(--border-light);
     border-radius: 10px;
@@ -1140,14 +1142,15 @@ section {
 }
 
 .fav-save-btn {
+    flex: 0 1 auto;
     background: var(--text-dark);
     color: white;
     border: none;
-    padding: 8px 14px;
+    padding: 8px 12px;
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 12.5px;
     transition: var(--transition);
     white-space: nowrap;
     font-family: inherit;
@@ -1822,11 +1825,10 @@ footer {
         padding: 18px;
     }
 
-    /* === Точная копия выравнивания блока «Избранное» (сохраненные заказы) по фотографии === */
+    /* === Мобильное отображение блока Избранного (инпут шире, кнопка компактнее) === */
     #favorites-popup {
-        width: 94%;
-        padding: 16px;
-        border-radius: 20px;
+        width: 96%;
+        padding: 15px;
     }
 
     #favorites-popup .cart-popup-header {
@@ -1835,15 +1837,10 @@ footer {
         align-items: center;
         flex-wrap: nowrap;
         gap: 8px;
-        border-bottom: 1px solid #e5e7eb;
-        padding-bottom: 10px;
-        margin-bottom: 14px;
     }
 
     #favorites-popup .cart-popup-header h3 {
-        font-size: 17px;
-        font-weight: 700;
-        color: #1e1e1e;
+        font-size: 16px;
         flex: 1 1 auto;
         min-width: 0;
         overflow: hidden;
@@ -1854,101 +1851,42 @@ footer {
     #favorites-popup #close-favorites-popup {
         flex-shrink: 0;
         margin-left: auto;
-        font-size: 24px;
-        color: #6b7280;
     }
 
-    /* Горизонтальная строка ввода и кнопки сохранения */
     #favorites-popup div[style*="display: flex"] {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 10px !important;
-        margin-bottom: 14px !important;
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
     }
 
     #favorites-popup .fav-input {
-        flex: 1 1 auto !important;
-        width: 0 !important;
-        min-width: 0 !important;
-        height: 48px !important;
-        padding: 0 14px !important;
-        background: #f3f4f6 !important;
-        border: 1px solid #d1d5db !important;
-        border-radius: 12px !important;
-        font-size: 14px !important;
-        color: #1e1e1e !important;
+        flex: 2 1 0%;
+        width: auto;
     }
 
     #favorites-popup .fav-save-btn {
-        flex: 0 0 auto !important;
-        width: auto !important;
-        height: 48px !important;
-        padding: 0 16px !important;
-        background: #1e1e1e !important;
-        color: #ffffff !important;
-        border: none !important;
-        border-radius: 12px !important;
-        font-size: 13px !important;
-        font-weight: 700 !important;
-        line-height: 1.2 !important;
-        text-align: center !important;
-        white-space: normal !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        flex: 0 1 auto;
+        width: auto;
+        white-space: nowrap;
     }
 
-    /* Выравнивание сохраненного карточкой элемента */
     .fav-item-row {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        background: #f9fafb !important;
-        border: 1px solid #e5e7eb !important;
-        border-radius: 14px !important;
-        padding: 10px 12px !important;
-        gap: 10px !important;
-    }
-
-    .fav-item-info {
-        flex: 1 1 auto !important;
-        min-width: 0 !important;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
     }
 
     .fav-actions {
-        display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 6px !important;
-        flex-shrink: 0 !important;
-        width: auto !important;
+        display: flex;
+        gap: 8px;
+        width: 100%;
     }
 
-    .fav-load-btn {
-        flex: 0 0 auto !important;
-        width: auto !important;
-        background: #2563eb !important;
-        color: #ffffff !important;
-        border-radius: 8px !important;
-        padding: 8px 14px !important;
-        font-size: 13px !important;
-        font-weight: 700 !important;
-    }
-
+    .fav-load-btn,
     .fav-del-btn {
-        flex: 0 0 auto !important;
-        width: 32px !important;
-        height: 32px !important;
-        padding: 0 !important;
-        background: #dc2626 !important;
-        color: #ffffff !important;
-        border-radius: 8px !important;
-        font-size: 14px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        flex: 1;
+        text-align: center;
+        padding: 8px 12px;
     }
 
     /* === Корзина на телефоне === */
@@ -1983,14 +1921,19 @@ footer {
     }
 
     .save-fav-input-panel {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: row;
+        align-items: center;
         gap: 8px;
     }
 
-    .save-fav-input-panel .fav-input,
+    .save-fav-input-panel .fav-input {
+        flex: 2 1 0%;
+        width: auto;
+    }
+
     .save-fav-input-panel .fav-save-btn {
-        width: 100%;
+        flex: 0 1 auto;
+        width: auto;
     }
 
     #order-confirm-modal .cart-popup-header {
