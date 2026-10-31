@@ -988,7 +988,7 @@ section {
 
 .cart-popup {
     position: fixed;
-    bottom: 130px;
+    bottom: 95px;
     left: 50%;
     transform: translateX(-50%) translateY(20px);
     width: 92%;
@@ -1033,31 +1033,26 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     border-bottom: 1px solid var(--border-light);
-    padding-bottom: 8px;
-    gap: 10px;
-    flex-wrap: wrap;
+    padding-bottom: 10px;
 }
 
 .cart-popup-header h3 {
     font-size: 18px;
     color: var(--text-dark);
-    margin: 0;
-    flex: 0 1 auto;
 }
 
 .cart-header-actions {
     display: flex;
-    align-items: center;
     gap: 8px;
-    flex-shrink: 0;
+    align-items: center;
 }
 
 .save-to-fav-btn {
-    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
-    color: #1d4ed8;
-    border: 1px solid #93c5fd;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e3a8a;
     border-radius: 20px;
     padding: 5px 10px;
     font-size: 12.5px;
@@ -1066,19 +1061,16 @@ section {
     transition: var(--transition);
     white-space: nowrap;
     font-family: inherit;
+    line-height: 1.2;
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    line-height: 1.2;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.08);
 }
 
 .save-to-fav-btn:hover {
-    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-    border-color: #60a5fa;
-    color: #1e3a8a;
+    background: #dbeafe;
+    border-color: #93c5fd;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
 .close-popup-btn {
@@ -1088,8 +1080,6 @@ section {
     color: var(--text-muted);
     cursor: pointer;
     line-height: 1;
-    padding: 0 4px;
-    flex-shrink: 0;
 }
 
 .close-popup-btn:hover { color: var(--text-dark); }
@@ -1097,7 +1087,6 @@ section {
 .save-fav-input-panel {
     display: flex;
     gap: 8px;
-    align-items: center;
     background: #f3f4f6;
     padding: 10px;
     border-radius: 12px;
@@ -1107,6 +1096,10 @@ section {
 }
 
 .save-fav-input-panel.hidden { display: none; }
+
+.save-fav-input-panel .fav-input {
+    background: #ffffff;
+}
 
 .cart-popup-items {
     display: flex;
@@ -1118,42 +1111,30 @@ section {
 }
 
 #confirm-modal-items {
-    max-height: 140px;
+    max-height: 160px;
     overflow-y: auto;
 }
 
-/* === Настройка пропорций: инпут шире (flex: 2), кнопка уже (flex: 1 с ограничением) === */
 .fav-input {
-    flex: 2 1 0%;
-    min-width: 0;
+    flex: 1;
     padding: 8px 12px;
     border: 1px solid var(--border-light);
     border-radius: 10px;
     font-size: 14px;
     outline: none;
     background: var(--bg-hover);
-    font-family: inherit;
-}
-
-.fav-input:focus {
-    border-color: #93c5fd;
-    box-shadow: 0 0 0 2px rgba(147, 197, 253, 0.3);
-    background: #ffffff;
 }
 
 .fav-save-btn {
-    flex: 0 1 auto;
     background: var(--text-dark);
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 8px 14px;
     border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
-    font-size: 12.5px;
+    font-size: 13px;
     transition: var(--transition);
-    white-space: nowrap;
-    font-family: inherit;
 }
 
 .fav-save-btn:hover { background: #374151; }
@@ -1167,7 +1148,6 @@ section {
     padding: 10px 15px;
     border-radius: 12px;
     border: 1px solid var(--border-light);
-    gap: 10px;
 }
 
 .popup-item-info,
@@ -1175,8 +1155,6 @@ section {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    flex: 1;
-    min-width: 0;
 }
 
 .popup-item-name,
@@ -1184,17 +1162,15 @@ section {
     font-weight: 700;
     color: var(--text-dark);
     font-size: 15px;
-    word-break: break-word;
 }
 
 .popup-item-price,
 .fav-item-desc {
     font-size: 13px;
     color: var(--text-muted);
-    word-break: break-word;
 }
 
-.fav-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.fav-actions { display: flex; gap: 8px; }
 
 .fav-load-btn {
     background: var(--accent-blue);
@@ -1205,7 +1181,6 @@ section {
     font-weight: 700;
     font-size: 12px;
     cursor: pointer;
-    white-space: nowrap;
 }
 
 .fav-load-btn:hover { background: #1d4ed8; }
@@ -1219,7 +1194,6 @@ section {
     font-weight: 700;
     font-size: 12px;
     cursor: pointer;
-    white-space: nowrap;
 }
 
 .fav-del-btn:hover { background: #b91c1c; }
@@ -1676,7 +1650,7 @@ footer {
 }
 
 .confirm-fav-save-row {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
     display: flex;
     gap: 8px;
     align-items: center;
@@ -1684,6 +1658,31 @@ footer {
     padding: 10px;
     border-radius: 12px;
     border: 1px solid #d1d5db;
+}
+
+/* ============ ШАПКА МОДАЛКИ ПОДТВЕРЖДЕНИЯ ЗАКАЗА ============ */
+
+.confirm-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+
+.confirm-modal-header h3 {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    font-size: 18px;
+    color: var(--text-dark);
+    order: 0;
+}
+
+.confirm-modal-header .close-popup-btn {
+    flex: 0 0 auto;
+    order: 0;
+    margin-left: auto;
 }
 
 /* ============ MOBILE ============ */
@@ -1696,7 +1695,7 @@ footer {
 
 @media (max-width: 768px) {
 
-    body { padding-bottom: 140px; }
+    body { padding-bottom: 130px; }
 
     .main-wrapper {
         margin: 0;
@@ -1705,7 +1704,7 @@ footer {
 
     header {
         padding: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
 
     .honey-grid,
@@ -1764,22 +1763,22 @@ footer {
     .order-items-preview { max-width: 100%; }
 
     .weight-option {
-        padding: 8px 10px;
-        gap: 8px;
+        padding: 6px 8px;
+        gap: 6px;
     }
 
-    .weight-label { font-size: 12.5px; }
+    .weight-label { font-size: 12px; }
 
-    .map-container { height: 200px; max-width: 100%; }
+    .map-container { height: 180px; }
 
-    #order-confirm-modal {
+    .cart-popup {
         width: 96%;
         padding: 15px;
-        max-height: 85vh;
+        bottom: 85px;
     }
 
     .to-top-btn {
-        bottom: 140px;
+        bottom: 130px;
         right: 10px;
         width: 44px;
         height: 44px;
@@ -1796,13 +1795,13 @@ footer {
     .table-select-btn { font-size: 12.5px; padding: 9px 11px; }
 
     .confirm-modal-footer {
-        flex-direction: row;
-        align-items: center;
-        gap: 10px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
     }
 
-    .confirm-modal-footer span { text-align: left; }
-    .confirm-whatsapp-btn { justify-content: center; width: auto; }
+    .confirm-modal-footer span { text-align: center; }
+    .confirm-whatsapp-btn { justify-content: center; }
 
     .table-details-content p { font-size: 12px; }
     .table-details-inner { padding: 10px 12px; }
@@ -1810,6 +1809,11 @@ footer {
     .cluster-plate {
         font-size: 11.5px;
         padding: 6px 10px;
+    }
+
+    .cluster-plate-bar {
+        font-size: 11px;
+        padding: 5px 8px;
     }
 
     .description-content {
@@ -1825,134 +1829,63 @@ footer {
         padding: 18px;
     }
 
-    /* === Мобильное отображение блока Избранного (инпут шире, кнопка компактнее) === */
-    #favorites-popup {
-        width: 96%;
-        padding: 15px;
-    }
-
-    #favorites-popup .cart-popup-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: nowrap;
-        gap: 8px;
-    }
-
-    #favorites-popup .cart-popup-header h3 {
-        font-size: 16px;
-        flex: 1 1 auto;
-        min-width: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    #favorites-popup #close-favorites-popup {
-        flex-shrink: 0;
-        margin-left: auto;
-    }
-
-    #favorites-popup div[style*="display: flex"] {
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-    }
-
-    #favorites-popup .fav-input {
-        flex: 2 1 0%;
-        width: auto;
-    }
-
-    #favorites-popup .fav-save-btn {
-        flex: 0 1 auto;
-        width: auto;
-        white-space: nowrap;
-    }
-
-    .fav-item-row {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
-
-    .fav-actions {
-        display: flex;
-        gap: 8px;
-        width: 100%;
-    }
-
-    .fav-load-btn,
-    .fav-del-btn {
-        flex: 1;
-        text-align: center;
-        padding: 8px 12px;
-    }
-
-    /* === Корзина на телефоне === */
-    .cart-popup-header {
+    /* --- Мобильная раскладка кнопки «Сохранить в избранное» --- */
+    #cart-popup .cart-popup-header {
         flex-wrap: wrap;
-        align-items: center;
-        gap: 6px;
     }
 
-    .cart-popup-header h3 {
+    #cart-popup .cart-popup-header h3 {
         flex: 1 1 auto;
         order: 1;
-        font-size: 16px;
+        min-width: 0;
     }
 
-    .cart-header-actions {
+    #cart-popup .cart-header-actions {
         display: contents;
     }
 
-    #close-cart-popup {
+    #cart-popup #close-cart-popup {
         order: 2;
-        margin-left: auto;
     }
 
-    .save-to-fav-btn {
-        flex: 1 1 100%;
+    #cart-popup .save-to-fav-btn {
         order: 3;
+        flex: 1 1 100%;
         justify-content: center;
         margin-top: 4px;
         padding: 8px 12px;
-        font-size: 13px;
+        font-size: 12.5px;
     }
 
     .save-fav-input-panel {
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
+        flex-direction: column;
+        gap: 6px;
     }
 
-    .save-fav-input-panel .fav-input {
-        flex: 2 1 0%;
-        width: auto;
-    }
-
+    .save-fav-input-panel .fav-input,
     .save-fav-input-panel .fav-save-btn {
-        flex: 0 1 auto;
-        width: auto;
+        width: 100%;
     }
 
-    #order-confirm-modal .cart-popup-header {
+    /* --- Шапка модалки подтверждения заказа на мобиле --- */
+    .confirm-modal-header {
         flex-wrap: nowrap;
+        justify-content: space-between;
         align-items: center;
-        gap: 8px;
     }
 
-    #order-confirm-modal .cart-popup-header h3 {
+    .confirm-modal-header h3 {
         flex: 1 1 auto;
-        order: 1;
-        font-size: 16px;
+        order: 0;
         min-width: 0;
+        margin: 0;
+        margin-right: 10px;
     }
 
-    #close-confirm-modal {
-        order: 2;
+    .confirm-modal-header .close-popup-btn {
+        flex: 0 0 auto;
+        order: 0;
         margin-left: auto;
-        flex-shrink: 0;
     }
 }
 
