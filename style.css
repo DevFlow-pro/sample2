@@ -196,7 +196,7 @@ header {
     letter-spacing: -0.5px;
 }
 
-/* ============ ЭТАЛОННАЯ ПЛАШКА ПРЕОДДЕРА (ИЗ ФОТО) ============ */
+/* ============ ЭТАЛОННАЯ ПЛАШКА ПРЕОДДЕРА ============ */
 
 .preorder-info-block {
     background: #edf2fb;
@@ -1868,7 +1868,6 @@ footer {
         padding: 18px;
     }
 
-    /* --- Мобильная раскладка кнопки «Сохранить в избранное» --- */
     #cart-popup .cart-popup-header {
         flex-wrap: wrap;
     }
@@ -1906,7 +1905,6 @@ footer {
         width: 100%;
     }
 
-    /* --- Шапка модалки подтверждения заказа на мобиле --- */
     .confirm-modal-header {
         flex-wrap: nowrap;
         justify-content: space-between;

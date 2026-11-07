@@ -87,20 +87,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function showReviewStatus(message, type = 'success') {
-        const reviewsSection = document.querySelector('.reviews-section');
-        if (!reviewsSection) return;
+        const reviewsList = document.getElementById('reviewsList');
+        if (!reviewsList) return;
 
         let statusBox = document.getElementById('reviewsStatusMessage');
         if (!statusBox) {
             statusBox = document.createElement('div');
             statusBox.id = 'reviewsStatusMessage';
             statusBox.className = 'reviews-status-message';
-            const reviewsHeader = reviewsSection.querySelector('.reviews-header-row');
-            if (reviewsHeader) {
-                reviewsHeader.insertAdjacentElement('afterend', statusBox);
-            } else {
-                reviewsSection.prepend(statusBox);
-            }
+            // Вставляем строго перед списком отзывов (после формы и разделителя)
+            reviewsList.insertAdjacentElement('beforebegin', statusBox);
         }
 
         statusBox.className = `reviews-status-message ${type}`;
@@ -270,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     showReviewStatus('Режим администратора успешно активирован на этом устройстве!', 'success');
                 } else if (result.status === 'success') {
                     localStorage.setItem('my_review_author', authorInput);
-                    showReviewStatus('✅ Отзыв опубликован. Если отзыв не появился — обновите страницу.', 'success');
+                    showReviewStatus('✅ Отзыв успешно оставлен. Если отзыв не появился — обновите страницу.', 'success');
                 }
 
                 form.reset();
