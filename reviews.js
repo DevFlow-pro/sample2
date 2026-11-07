@@ -38,10 +38,10 @@ function containsBadWords(text) {
 
     for (let w of words) {
         for (let bw of badWords) {
-            if (w.includes(bw) || bw.includes(w)) {
-                if (w === bw || (w.length >= 3 && bw.length >= 3 && (w.startsWith(bw) || w.endsWith(bw) || w.includes(bw)))) {
-                    return true;
-                }
+            if (bw.length <= 2) {
+                if (w === bw || w.startsWith(bw)) return true;
+            } else {
+                if (w.includes(bw)) return true;
             }
         }
     }
@@ -86,13 +86,45 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    function showReviewStatus(message, type = 'success') {
+        const reviewsSection = document.querySelector('.reviews-section');
+        if (!reviewsSection) return;
+
+        let statusBox = document.getElementById('reviewsStatusMessage');
+        if (!statusBox) {
+            statusBox = document.createElement('div');
+            statusBox.id = 'reviewsStatusMessage';
+            statusBox.className = 'reviews-status-message';
+            const reviewsHeader = reviewsSection.querySelector('.reviews-header-row');
+            if (reviewsHeader) {
+                reviewsHeader.insertAdjacentElement('afterend', statusBox);
+            } else {
+                reviewsSection.prepend(statusBox);
+            }
+        }
+
+        statusBox.className = `reviews-status-message ${type}`;
+        statusBox.innerHTML = `
+            <span>${message}</span>
+            <button type="button" class="close-status-btn" onclick="this.parentElement.remove()">×</button>
+        `;
+    }
+
     async function fetchReviews() {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
         try {
-            const response = await fetch(`${WEB_APP_URL}?action=get`);
+            const response = await fetch(`${WEB_APP_URL}?action=get`, { signal: controller.signal });
+            clearTimeout(timeoutId);
             const data = await response.json();
             return Array.isArray(data) ? data : [];
         } catch (error) {
+            clearTimeout(timeoutId);
             console.error("Ошибка загрузки отзывов:", error);
+            const list = document.getElementById('reviewsList');
+            if (list) {
+                list.innerHTML = '<div class="no-reviews-msg">Не удалось загрузить отзывы. Обновите страницу.</div>';
+            }
             return [];
         }
     }
@@ -101,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const list = document.getElementById('reviewsList');
         const summaryStars = document.getElementById('summaryStars');
         const summaryCount = document.getElementById('summaryCount');
+        if (!list) return;
 
         const reviews = await fetchReviews();
         const isAdmin = localStorage.getItem('is_honey_admin') === 'true';
@@ -110,8 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if (reviews.length === 0) {
             list.innerHTML = '<div class="no-reviews-msg">Отзывов пока нет. Будьте первыми!</div>';
-            summaryStars.textContent = '★★★★★';
-            summaryCount.textContent = '(0 отзывов)';
+            if (summaryStars) summaryStars.textContent = '★★★★★';
+            if (summaryCount) summaryCount.textContent = '(0 отзывов)';
             return;
         }
 
@@ -119,8 +152,8 @@ document.addEventListener('DOMContentLoaded', function() {
         reviews.forEach(rev => totalScore += Number(rev.rating || 5));
         const avgRating = (totalScore / reviews.length).toFixed(1);
         const fullStarsCount = Math.round(totalScore / reviews.length);
-        summaryStars.textContent = '★'.repeat(fullStarsCount) + '☆'.repeat(5 - fullStarsCount);
-        summaryCount.textContent = `(${reviews.length} ${getDeclension(reviews.length)}) — ${avgRating} / 5`;
+        if (summaryStars) summaryStars.textContent = '★'.repeat(fullStarsCount) + '☆'.repeat(5 - fullStarsCount);
+        if (summaryCount) summaryCount.textContent = `(${reviews.length} ${getDeclension(reviews.length)}) — ${avgRating} / 5`;
 
         reviews.forEach((rev) => {
             const card = document.createElement('div');
@@ -128,17 +161,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const starsHtml = '★'.repeat(rev.rating || 5) + '☆'.repeat(5 - (rev.rating || 5));
             let actionsHtml = '';
-            let isMyReview = currentAuthor && rev.author.toLowerCase() === currentAuthor.toLowerCase();
+            let isMyReview = currentAuthor && rev.author && rev.author.toLowerCase() === currentAuthor.toLowerCase();
 
             if (isAdmin) {
                 actionsHtml += `
                     <button class="action-btn reply-admin-btn" onclick="openAdminReplyModal('${rev.rowId}')">Ответить</button>
-                    <button class="action-btn delete-btn" onclick="removeReview('${rev.rowId}', true)">Удалить</button>
+                    <button class="action-btn delete-btn" onclick="removeReview('${rev.rowId}')">Удалить</button>
                 `;
             } else if (isMyReview) {
                 actionsHtml += `
                     <button class="action-btn edit-btn" onclick="openEditModal('${rev.rowId}', '${escapeAttr(rev.author)}', '${escapeAttr(rev.text)}', ${rev.rating || 5})">Редактировать</button>
-                    <button class="action-btn delete-btn" onclick="removeReview('${rev.rowId}', false)">Удалить</button>
+                    <button class="action-btn delete-btn" onclick="removeReview('${rev.rowId}')">Удалить</button>
                 `;
             }
 
@@ -151,9 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 adminReplyHtml = `
                     <div class="playmarket-reply-box">
                         <div class="playmarket-reply-header">
-                            <span class="playmarket-reply-author">
-                                Администратор
-                            </span>
+                            <span class="playmarket-reply-author">Администратор</span>
                         </div>
                         <div class="playmarket-reply-text">${escapeHtml(rev.adminReply)}</div>
                     </div>
@@ -185,78 +216,82 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function escapeHtml(text) {
         if (!text) return '';
-        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
         return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
     }
 
     function escapeAttr(text) {
         if (!text) return '';
-        return text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+        return String(text).replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
     }
 
     const form = document.getElementById('reviewForm');
     const profanityErrorBox = document.getElementById('profanityError');
 
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
+    if (form) {
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-        const authorInput = document.getElementById('reviewAuthor').value.trim();
-        const textInput = document.getElementById('reviewText').value.trim();
-        const rating = parseInt(ratingInput.value);
+            const authorInput = document.getElementById('reviewAuthor').value.trim();
+            const textInput = document.getElementById('reviewText').value.trim();
+            const rating = parseInt(ratingInput.value);
 
-        if (!authorInput || !textInput) return;
+            if (!authorInput || !textInput) return;
 
-        if (containsBadWords(authorInput) || containsBadWords(textInput)) {
-            profanityErrorBox.style.display = 'block';
-            return;
-        } else {
-            profanityErrorBox.style.display = 'none';
-        }
-
-        localStorage.setItem('my_review_author', authorInput);
-
-        const submitBtn = document.getElementById('submitBtn');
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Отправка...';
-
-        try {
-            const response = await fetch(WEB_APP_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    action: 'save',
-                    author: authorInput,
-                    text: textInput,
-                    rating: rating
-                })
-            });
-
-            const result = await response.json();
-
-            if (result.status === 'admin_success') {
-                localStorage.setItem('is_honey_admin', 'true');
-                alert('Режим администратора успешно активирован на этом устройстве!');
-            } else if (result.status === 'success') {
-                alert('Отзыв отправлен! Если он не появился сразу, пожалуйста, обновите страницу.');
+            if (containsBadWords(authorInput) || containsBadWords(textInput)) {
+                if (profanityErrorBox) profanityErrorBox.style.display = 'block';
+                return;
+            } else {
+                if (profanityErrorBox) profanityErrorBox.style.display = 'none';
             }
 
-            form.reset();
-            document.getElementById('reviewAuthor').value = authorInput;
-            submitBtn.textContent = 'Оставить отзыв';
-            ratingInput.value = 5;
-            updateStars(5, stars);
+            const submitBtn = document.getElementById('submitBtn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Отправка...';
+            }
 
-            await renderReviews();
-        } catch (error) {
-            console.error('Ошибка отправки:', error);
-            alert('Отзыв отправлен. Если он не появился, пожалуйста, обновите страницу.');
-            await renderReviews();
-        } finally {
-            submitBtn.disabled = false;
-        }
-    });
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'save',
+                        author: authorInput,
+                        text: textInput,
+                        rating: rating
+                    })
+                });
 
-    window.removeReview = async function(rowId, isAdminAction) {
+                const result = await response.json();
+
+                if (result.status === 'admin_success') {
+                    localStorage.setItem('is_honey_admin', 'true');
+                    showReviewStatus('Режим администратора успешно активирован на этом устройстве!', 'success');
+                } else if (result.status === 'success') {
+                    localStorage.setItem('my_review_author', authorInput);
+                    showReviewStatus('✅ Отзыв опубликован. Если отзыв не появился — обновите страницу.', 'success');
+                }
+
+                form.reset();
+                const reviewAuthorEl = document.getElementById('reviewAuthor');
+                if (reviewAuthorEl) reviewAuthorEl.value = authorInput;
+                if (submitBtn) submitBtn.textContent = 'Оставить отзыв';
+                ratingInput.value = 5;
+                updateStars(5, stars);
+
+                await renderReviews();
+            } catch (error) {
+                console.error('Ошибка отправки:', error);
+                showReviewStatus('Отзыв отправлен. Если отзыв не появился — обновите страницу.', 'error');
+                await renderReviews();
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
+        });
+    }
+
+    window.removeReview = async function(rowId) {
         if (confirm('Вы уверены, что хотите удалить этот отзыв?')) {
             const isAdmin = localStorage.getItem('is_honey_admin') === 'true';
             const adminMarker = isAdmin ? 'honey123' : '';
@@ -275,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 const result = await response.json();
                 if (result.status === 'success') {
-                    alert('Отзыв успешно удален.');
+                    showReviewStatus('Отзыв успешно удален.', 'success');
                     await renderReviews();
                 } else {
                     alert(result.message || 'Ошибка удаления');
@@ -311,76 +346,82 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('adminModal').classList.add('active');
     };
 
-    document.getElementById('closeAdminModal').addEventListener('click', () => {
-        document.getElementById('adminModal').classList.remove('active');
-    });
+    const closeAdminModalBtn = document.getElementById('closeAdminModal');
+    if (closeAdminModalBtn) {
+        closeAdminModalBtn.addEventListener('click', () => {
+            document.getElementById('adminModal').classList.remove('active');
+        });
+    }
 
-    document.getElementById('sendAdminReplyBtn').addEventListener('click', async () => {
-        const rowId = document.getElementById('replyRowId').value;
-        const mode = document.getElementById('modalMode').value;
-        const textVal = document.getElementById('adminModalText').value;
-        const newAuthorVal = document.getElementById('editReviewAuthor').value.trim();
-        const modalErr = document.getElementById('modalProfanityError');
+    const sendAdminReplyBtn = document.getElementById('sendAdminReplyBtn');
+    if (sendAdminReplyBtn) {
+        sendAdminReplyBtn.addEventListener('click', async () => {
+            const rowId = document.getElementById('replyRowId').value;
+            const mode = document.getElementById('modalMode').value;
+            const textVal = document.getElementById('adminModalText').value;
+            const newAuthorVal = document.getElementById('editReviewAuthor').value.trim();
+            const modalErr = document.getElementById('modalProfanityError');
 
-        if (!textVal) {
-            alert('Поле текста не может быть пустым!');
-            return;
-        }
-
-        if (mode === 'edit') {
-            if (!newAuthorVal) {
-                alert('Имя автора не может быть пустым!');
+            if (!textVal) {
+                alert('Поле текста не может быть пустым!');
                 return;
             }
-            if (containsBadWords(newAuthorVal) || containsBadWords(textVal)) {
-                modalErr.style.display = 'block';
-                return;
-            } else {
-                modalErr.style.display = 'none';
-            }
-        }
 
-        try {
-            let bodyData = {};
-            if (mode === 'reply') {
-                const isAdmin = localStorage.getItem('is_honey_admin') === 'true';
-                const adminMarker = isAdmin ? 'honey123' : '';
-                bodyData = {
-                    action: 'adminReply',
-                    rowId: rowId,
-                    adminMarker: adminMarker,
-                    replyText: textVal
-                };
-            } else {
-                bodyData = {
-                    action: 'editReview',
-                    rowId: rowId,
-                    authorKey: localStorage.getItem('my_review_author') || '',
-                    newAuthor: newAuthorVal,
-                    newText: textVal,
-                    newRating: parseInt(document.getElementById('editReviewRating').value)
-                };
-                localStorage.setItem('my_review_author', newAuthorVal);
+            if (mode === 'edit') {
+                if (!newAuthorVal) {
+                    alert('Имя автора не может быть пустым!');
+                    return;
+                }
+                if (containsBadWords(newAuthorVal) || containsBadWords(textVal)) {
+                    modalErr.style.display = 'block';
+                    return;
+                } else {
+                    modalErr.style.display = 'none';
+                }
             }
 
-            const response = await fetch(WEB_APP_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(bodyData)
-            });
-            const result = await response.json();
-            if (result.status === 'success') {
-                alert('Изменения успешно сохранены! Обновите страницу, если они не отобразились.');
-                document.getElementById('adminModal').classList.remove('active');
+            try {
+                let bodyData = {};
+                if (mode === 'reply') {
+                    const isAdmin = localStorage.getItem('is_honey_admin') === 'true';
+                    const adminMarker = isAdmin ? 'honey123' : '';
+                    bodyData = {
+                        action: 'adminReply',
+                        rowId: rowId,
+                        adminMarker: adminMarker,
+                        replyText: textVal
+                    };
+                } else {
+                    bodyData = {
+                        action: 'editReview',
+                        rowId: rowId,
+                        authorKey: localStorage.getItem('my_review_author') || '',
+                        newAuthor: newAuthorVal,
+                        newText: textVal,
+                        newRating: parseInt(document.getElementById('editReviewRating').value)
+                    };
+                    localStorage.setItem('my_review_author', newAuthorVal);
+                }
+
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(bodyData)
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    showReviewStatus('Изменения успешно сохранены!', 'success');
+                    document.getElementById('adminModal').classList.remove('active');
+                    await renderReviews();
+                } else {
+                    alert(result.message || 'Ошибка выполнения операции');
+                }
+            } catch (e) {
+                alert('Ошибка соединения. Обновите страницу.');
                 await renderReviews();
-            } else {
-                alert(result.message || 'Ошибка выполнения операции');
             }
-        } catch (e) {
-            alert('Ошибка соединения. Обновите страницу.');
-            await renderReviews();
-        }
-    });
+        });
+    }
 
     renderReviews();
 });

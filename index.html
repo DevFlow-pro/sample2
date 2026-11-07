@@ -376,7 +376,7 @@
 
                         <div class="map-container">
                             <iframe 
-                                src="https://yandex.ru/map-widget/v1/?um=constructor%3A1f8a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d1e2f&amp;source=constructor"
+                                src="https://yandex.ru/map-widget/v1/?um=constructor%3A1f8a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d1e2f&source=constructor"
                                 allowfullscreen>
                             </iframe>
                             <div class="map-placeholder-text">
@@ -455,7 +455,7 @@
         <button id="toTopBtn" class="to-top-btn">↑</button>
 
         <footer>
-            <p>&copy; 2026 Шаблон сайта «Промёд». Все права защищены.</p>
+            <p>© 2026 Шаблон сайта «Промёд». Все права защищены.</p>
         </footer>
 
     </div>
@@ -497,7 +497,7 @@
     <div id="favorites-popup" class="cart-popup hidden">
         <div class="cart-popup-header">
             <h3>⭐ Ваши сохраненные заказы</h3>
-            <button id="close-favorites-popup" class="close-popup-btn">&times;</button>
+            <button id="close-favorites-popup" class="close-popup-btn">×</button>
         </div>
         <div style="margin-bottom: 12px; display: flex; gap: 8px;">
             <input type="text" id="fav-name-input" placeholder="Название набора" class="fav-input">
@@ -515,7 +515,7 @@
                 <button id="open-save-fav-panel-btn" class="save-to-fav-btn" title="Сохранить в избранное">
                     ⭐ Сохранить в избранное
                 </button>
-                <button id="close-cart-popup" class="close-popup-btn">&times;</button>
+                <button id="close-cart-popup" class="close-popup-btn">×</button>
             </div>
         </div>
 
@@ -550,53 +550,25 @@
 
     <!-- LIGHTBOX -->
     <div id="lightbox" class="lightbox-modal">
-        <span class="lightbox-close">&times;</span>
+        <span class="lightbox-close">×</span>
         <img class="lightbox-content" id="lightbox-img" alt="Увеличенное фото">
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const toTopBtn = document.getElementById("toTopBtn");
-            const orderBar = document.getElementById("order-bar");
-            const cartPopup = document.getElementById("cart-popup");
 
-            function updateToTopPosition() {
-                const isOrderBarVisible = orderBar && !orderBar.classList.contains('hidden');
-                const isCartPopupActive = cartPopup && cartPopup.classList.contains('active');
-
-                if (isOrderBarVisible || isCartPopupActive) {
-                    toTopBtn.style.bottom = '200px';
-                } else {
-                    toTopBtn.style.bottom = '90px';
-                }
-            }
-
-            const observer = new MutationObserver(function() {
-                updateToTopPosition();
-            });
-
-            if (orderBar) observer.observe(orderBar, { attributes: true, attributeFilter: ['class'] });
-            if (cartPopup) observer.observe(cartPopup, { attributes: true, attributeFilter: ['class'] });
-
-            window.addEventListener('scroll', updateToTopPosition);
-
-            window.onscroll = function() {
+            window.addEventListener('scroll', function() {
                 if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
                     toTopBtn.classList.add("visible");
                 } else {
                     toTopBtn.classList.remove("visible");
                 }
-                updateToTopPosition();
-            };
+            });
 
             toTopBtn.onclick = function() {
                 window.scrollTo({top: 0, behavior: 'smooth'});
             };
-
-            const observerDOM = new MutationObserver(function() {
-                updateToTopPosition();
-            });
-            observerDOM.observe(document.body, { childList: true, subtree: true, attributes: true });
 
             const toggleButtons = document.querySelectorAll('.toggle-description-btn');
 
@@ -620,8 +592,6 @@
                     }
                 });
             });
-
-            setTimeout(updateToTopPosition, 100);
         });
     </script>
 

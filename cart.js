@@ -1,3 +1,5 @@
+document.include = {}; // safe placeholder
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // ============================================
@@ -7,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const STORAGE_KEY = `${SITE_UNIQUE_ID}_cart_v1`;
     const FAV_STORAGE_KEY = `${SITE_UNIQUE_ID}_favs_v1`;
+    const SAVED_TABLE_KEY = `${SITE_UNIQUE_ID}_saved_table`;
+    const SAVED_TABLE_TIME_KEY = `${SITE_UNIQUE_ID}_saved_table_time`;
 
     const WHATSAPP_NUMBER = '77074242531';
 
@@ -14,9 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
     let favorites = JSON.parse(localStorage.getItem(FAV_STORAGE_KEY)) || [];
 
     const urlParams = new URLSearchParams(window.location.search);
-    const tableFromUrl = urlParams.get('table');
+    const tableFromUrlParam = urlParams.get('table');
+
+    let tableFromUrl = null;
+    const twoDaysMs = 172800000;
+
+    if (tableFromUrlParam) {
+        localStorage.setItem(SAVED_TABLE_KEY, tableFromUrlParam);
+        localStorage.setItem(SAVED_TABLE_TIME_KEY, Date.now().toString());
+        tableFromUrl = tableFromUrlParam;
+    } else {
+        const savedTable = localStorage.getItem(SAVED_TABLE_KEY);
+        const savedTime = localStorage.getItem(SAVED_TABLE_TIME_KEY);
+        if (savedTable && savedTime) {
+            if ((Date.now() - parseInt(savedTime, 10)) < twoDaysMs) {
+                tableFromUrl = savedTable;
+            } else {
+                localStorage.removeItem(SAVED_TABLE_KEY);
+                localStorage.removeItem(SAVED_TABLE_TIME_KEY);
+            }
+        }
+    }
+
     let selectedTable = null;
     let orderType = null;
+    let hasOpenedConfirmModal = false;
 
     const cards = document.querySelectorAll('.info-card[data-id]');
 
@@ -39,13 +65,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveCurrentFavBtn = document.getElementById('save-current-fav-btn');
     const favBadge = document.getElementById('fav-badge');
 
-    // --- НОВЫЕ ЭЛЕМЕНТЫ: СОХРАНЕНИЕ В ИЗБРАННОЕ ИЗ КОРЗИНЫ ---
     const openSaveFavPanelBtn = document.getElementById('open-save-fav-panel-btn');
     const saveFavInputPanel = document.getElementById('save-fav-input-panel');
     const saveFavNameInput = document.getElementById('save-fav-name-input');
     const confirmSaveFavBtnFromCart = document.getElementById('confirm-save-fav-btn');
 
-    // --- МОДАЛЬНОЕ ОКНО ПОДТВЕРЖДЕНИЯ ЗАКАЗА ---
+    const toTopBtn = document.getElementById("toTopBtn");
+
+    function updateToTopPosition() {
+        if (!toTopBtn) return;
+        const isMobile = window.innerWidth <= 767;
+        const isFavOpen = favoritesPopup && favoritesPopup.classList.contains('active');
+        const isCartOpen = cartPopup && cartPopup.classList.contains('active');
+
+        if (isMobile && (isFavOpen || isCartOpen)) {
+            toTopBtn.style.bottom = '200px';
+        } else {
+            toTopBtn.style.bottom = '';
+        }
+    }
+
+    window.addEventListener('resize', updateToTopPosition);
+
+    window.addEventListener('scroll', function() {
+        if (!toTopBtn) return;
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            toTopBtn.classList.add("visible");
+        } else {
+            toTopBtn.classList.remove("visible");
+        }
+        updateToTopPosition();
+    });
+
+    if (toTopBtn) {
+        toTopBtn.onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+    }
+
     const orderConfirmModal = document.createElement('div');
     orderConfirmModal.id = 'order-confirm-modal';
     orderConfirmModal.className = 'cart-popup';
@@ -53,12 +110,11 @@ document.addEventListener('DOMContentLoaded', () => {
     orderConfirmModal.innerHTML = `
         <div class="cart-popup-header">
             <h3>Проверьте детали заказа</h3>
-            <button id="close-confirm-modal" class="close-popup-btn">&times;</button>
+            <button id="close-confirm-modal" class="close-popup-btn">×</button>
         </div>
 
         <div class="cluster-plate-modal">Проверьте состав, укажите стол или выберите предоплату, затем отправьте в WhatsApp</div>
 
-        <!-- БЛОК ВЫБОРА СТОЛА -->
         <div id="table-selection-block" class="table-selection-block">
             <h4 class="table-selection-title">Закажите, уточните: за каким столом вы сидите или заказываете из дома</h4>
 
@@ -183,7 +239,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function handleTableSelection(type) {
-        resetTableSelection();
+        [tableBtnCurrent, tableBtnOther, tableBtnTakeaway].forEach(btn => {
+            btn.classList.remove('active', 'selected-takeaway');
+        });
         tableErrorMessage.classList.add('hidden');
 
         if (type === 'current') {
@@ -191,50 +249,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 selectedTable = tableFromUrl;
                 orderType = 'dine-in';
                 tableBtnCurrent.classList.add('active');
+                manualTableInputContainer.classList.add('hidden');
             } else {
-                tableBtnOther.click();
-                return;
+                handleTableSelection('other');
             }
         } else if (type === 'other') {
             orderType = 'dine-in';
             tableBtnOther.classList.add('active');
             manualTableInputContainer.classList.remove('hidden');
             manualTableInput.focus();
-            return;
         } else if (type === 'takeaway') {
             orderType = 'takeaway';
             selectedTable = 'takeaway';
             tableBtnTakeaway.classList.add('active', 'selected-takeaway');
+            manualTableInputContainer.classList.add('hidden');
         }
     }
 
-    tableBtnCurrent.addEventListener('click', () => handleTableSelection('current'));
-    tableBtnOther.addEventListener('click', () => handleTableSelection('other'));
-    tableBtnTakeaway.addEventListener('click', () => handleTableSelection('takeaway'));
+    if (tableBtnCurrent) tableBtnCurrent.addEventListener('click', () => handleTableSelection('current'));
+    if (tableBtnOther) tableBtnOther.addEventListener('click', () => handleTableSelection('other'));
+    if (tableBtnTakeaway) tableBtnTakeaway.addEventListener('click', () => handleTableSelection('takeaway'));
 
-    confirmManualTableBtn.addEventListener('click', () => {
-        const manualTableNumber = manualTableInput.value.trim();
-        if (manualTableNumber && !isNaN(manualTableNumber) && Number(manualTableNumber) > 0) {
-            selectedTable = manualTableNumber;
-            orderType = 'dine-in';
-            manualTableInputContainer.classList.add('hidden');
-            tableErrorMessage.classList.add('hidden');
-            tableBtnOther.querySelector('.table-btn-text').textContent = `Стол №${manualTableNumber}`;
-            tableBtnOther.classList.add('active');
-        } else {
-            manualTableInput.style.borderColor = '#dc2626';
-            setTimeout(() => { manualTableInput.style.borderColor = ''; }, 2000);
-        }
-    });
+    if (confirmManualTableBtn) {
+        confirmManualTableBtn.addEventListener('click', () => {
+            const manualTableNumber = manualTableInput.value.trim();
+            if (manualTableNumber && !isNaN(manualTableNumber) && Number(manualTableNumber) > 0) {
+                selectedTable = manualTableNumber;
+                orderType = 'dine-in';
+                manualTableInputContainer.classList.add('hidden');
+                tableErrorMessage.classList.add('hidden');
+                tableBtnOther.querySelector('.table-btn-text').textContent = `Стол №${manualTableNumber}`;
+                tableBtnOther.classList.add('active');
+            } else {
+                manualTableInput.style.borderColor = '#dc2626';
+                setTimeout(() => { manualTableInput.style.borderColor = ''; }, 2000);
+            }
+        });
+    }
 
-    manualTableInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            confirmManualTableBtn.click();
-        }
-    });
+    if (manualTableInput) {
+        manualTableInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                confirmManualTableBtn.click();
+            }
+        });
+    }
 
     function formatWeight(weight) {
-        return weight === '1.5' ? '1,5 кг' : `${weight} кг`;
+        return String(weight).replace('.', ',') + ' кг';
     }
 
     function getCartKey(id, weight) {
@@ -250,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             weightOptions.forEach(option => {
                 const weight = option.dataset.weight;
-                const price = parseInt(option.dataset.price);
+                const price = parseInt(option.dataset.price, 10);
                 const key = getCartKey(id, weight);
                 const qty = cart[key] || 0;
 
@@ -333,6 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+        updateToTopPosition();
     }
 
     function updateFavoritesUI() {
@@ -435,15 +498,21 @@ document.addEventListener('DOMContentLoaded', () => {
             saveFavInputPanel.classList.add('hidden');
         }
 
-        resetTableSelection();
+        if (!hasOpenedConfirmModal) {
+            resetTableSelection();
+            hasOpenedConfirmModal = true;
+        }
+
         updateConfirmModalContent();
         modalBackdrop.style.display = 'block';
         orderConfirmModal.classList.add('active');
+        updateToTopPosition();
     }
 
     function closeOrderConfirmModal() {
         orderConfirmModal.classList.remove('active');
         modalBackdrop.style.display = 'none';
+        updateToTopPosition();
     }
 
     function updateConfirmModalContent() {
@@ -600,6 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (favoritesPopup) favoritesPopup.classList.remove('active');
             if (saveFavInputPanel) saveFavInputPanel.classList.add('hidden');
             cartPopup.classList.toggle('active');
+            updateToTopPosition();
         });
     }
 
@@ -607,6 +677,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closePopupBtn.addEventListener('click', () => {
             if (saveFavInputPanel) saveFavInputPanel.classList.add('hidden');
             cartPopup.classList.remove('active');
+            updateToTopPosition();
         });
     }
 
@@ -615,12 +686,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (cartPopup) cartPopup.classList.remove('active');
             if (saveFavInputPanel) saveFavInputPanel.classList.add('hidden');
             favoritesPopup.classList.toggle('active');
+            updateToTopPosition();
         });
     }
 
     if (closeFavoritesPopup && favoritesPopup) {
         closeFavoritesPopup.addEventListener('click', () => {
             favoritesPopup.classList.remove('active');
+            updateToTopPosition();
         });
     }
 
@@ -660,7 +733,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- СОХРАНЕНИЕ В ИЗБРАННОЕ ИЗ ПОПАПА КОРЗИНЫ ---
     if (openSaveFavPanelBtn && saveFavInputPanel) {
         openSaveFavPanelBtn.addEventListener('click', () => {
             saveFavInputPanel.classList.toggle('hidden');
