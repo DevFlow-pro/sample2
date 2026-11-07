@@ -55,6 +55,7 @@
             <section id="catalog">
                 <h1 class="page-heading">Каталог товаров</h1>
 
+                <!-- Эталонная плашка заказа -->
                 <div class="preorder-info-block">
                     <span class="preorder-title">Заказывайте заранее — приезжайте к готовому.</span>
                     Оформите заказ из дома, выберите удобный стол или заберите на вынос.
@@ -379,10 +380,6 @@
                                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A1f8a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d1e2f&source=constructor"
                                 allowfullscreen>
                             </iframe>
-                            <div class="map-placeholder-text">
-                                🌍 Карта мира
-                                <small>Добавьте сюда координаты вашей точки</small>
-                            </div>
                         </div>
 
                         <!-- Разделитель между картой и маршрутами -->
@@ -519,7 +516,6 @@
             </div>
         </div>
 
-        <!-- Панель ввода: скрыта по умолчанию, открывается кнопкой -->
         <div id="save-fav-input-panel" class="save-fav-input-panel hidden">
             <input type="text" id="save-fav-name-input" class="fav-input" placeholder="Введите название набора">
             <button id="confirm-save-fav-btn" class="fav-save-btn">Сохранить</button>
@@ -529,7 +525,7 @@
 
     </div>
 
-    <!-- НИЖНЯЯ ПАНЕЛЬ ЗАКАЗА (без объяснительной плашки) -->
+    <!-- НИЖНЯЯ ПАНЕЛЬ ЗАКАЗА -->
     <div id="order-bar" class="order-bar hidden">
         <div class="order-bar-content">
             <div id="order-bar-toggle" class="order-info">
@@ -556,20 +552,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const toTopBtn = document.getElementById("toTopBtn");
-
-            window.addEventListener('scroll', function() {
-                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-                    toTopBtn.classList.add("visible");
-                } else {
-                    toTopBtn.classList.remove("visible");
-                }
-            });
-
-            toTopBtn.onclick = function() {
-                window.scrollTo({top: 0, behavior: 'smooth'});
-            };
-
             const toggleButtons = document.querySelectorAll('.toggle-description-btn');
 
             toggleButtons.forEach(button => {

@@ -189,11 +189,40 @@ header {
 /* ============ PAGE HEADING ============ */
 
 .page-heading {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     color: var(--text-dark);
     font-size: 28px;
     font-weight: 800;
     letter-spacing: -0.5px;
+}
+
+/* ============ ЭТАЛОННАЯ ПЛАШКА ПРЕОДДЕРА (ИЗ ФОТО) ============ */
+
+.preorder-info-block {
+    background: #edf2fb;
+    border-left: 5px solid #2563eb;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: #374151;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.05);
+}
+
+.preorder-title {
+    display: block;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 4px;
+    font-size: 15px;
+}
+
+.preorder-sub {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: #6b7280;
 }
 
 /* ============ SECTION DIVIDER ============ */
@@ -476,7 +505,7 @@ section {
     font-size: 12px;
 }
 
-/* ============ CONTACTS GRID ============ */
+/* ============ CONTACTС GRID ============ */
 
 .contacts-grid {
     display: grid;
@@ -609,25 +638,6 @@ section {
     width: 100%;
     height: 100%;
     border: 0;
-}
-
-.map-placeholder-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #6b7280;
-    font-weight: 700;
-    font-size: 18px;
-    text-align: center;
-    pointer-events: none;
-}
-
-.map-placeholder-text small {
-    display: block;
-    font-size: 13px;
-    font-weight: 400;
-    margin-top: 8px;
 }
 
 .navigators-group {
@@ -1843,11 +1853,6 @@ footer {
     .cluster-plate {
         font-size: 11.5px;
         padding: 6px 10px;
-    }
-
-    .cluster-plate-bar {
-        font-size: 11px;
-        padding: 5px 8px;
     }
 
     .description-content {
